@@ -17,6 +17,7 @@ const pubsubHelper = require("./pubsub");
 // Cloud Firestore db initialization
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
+const topicName = functions.config().pubsubtopic.name;
 //get router
 const app = express();
 //options for cors midddleware
@@ -74,5 +75,12 @@ app.get('/views', (req, res) => __awaiter(this, void 0, void 0, function* () {
         console.log('error publishing event');
     }
 }));
+// pubsub trigger function
+exports.consumeViews = functions.pubsub.topic(topicName).onPublish((message) => {
+    // Decode the PubSub Message body.
+    const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
+    console.log(messageBody);
+    return true;
+});
 exports.online = functions.https.onRequest(app);
 //# sourceMappingURL=index.js.map

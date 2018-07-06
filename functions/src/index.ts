@@ -8,7 +8,7 @@ import * as pubsubHelper from './pubsub';
 // Cloud Firestore db initialization
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
-
+const topicName = functions.config().pubsubtopic.name;
 
 //get router
 const app = express();
@@ -74,6 +74,14 @@ app.get('/views', async (req, res) => {
   catch(err) {
     console.log('error publishing event');
   }
+});
+
+// pubsub trigger function
+exports.consumeViews = functions.pubsub.topic(topicName).onPublish((message) => {
+  // Decode the PubSub Message body.
+  const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
+  console.log(messageBody);
+  return true;
 });
 
 exports.online = functions.https.onRequest(app);
