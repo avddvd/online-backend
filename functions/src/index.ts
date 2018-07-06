@@ -66,13 +66,15 @@ app.get('/views', async (req, res) => {
 	const headers = req.headers;		
   data['x-forwarded-for'] = headers['x-forwarded-for'];
   data['user-agent'] = headers['user-agent'];
-	res.status(200).end();
-	try {
-		await publishEvent(data);
-	}
-	catch(err) {
-		console.log('error publishing event');
-	}
+	setTimeout(async () => {
+		try {
+			await publishEvent(data);
+		}
+		catch(err) {
+			console.log('error publishing event');
+		}
+	}, 100);
+	res.status(201).end();
 });
 
 exports.online = functions.https.onRequest(app);

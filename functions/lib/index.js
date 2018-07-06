@@ -66,13 +66,15 @@ app.get('/views', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const headers = req.headers;
     data['x-forwarded-for'] = headers['x-forwarded-for'];
     data['user-agent'] = headers['user-agent'];
-    res.status(200).end();
-    try {
-        yield publishEvent(data);
-    }
-    catch (err) {
-        console.log('error publishing event');
-    }
+    setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield publishEvent(data);
+        }
+        catch (err) {
+            console.log('error publishing event');
+        }
+    }), 100);
+    res.status(201).end();
 }));
 exports.online = functions.https.onRequest(app);
 //export const views = functions.https.onRequest(async (request, response) => {
