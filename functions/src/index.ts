@@ -66,55 +66,13 @@ app.get('/views', async (req, res) => {
 	const headers = req.headers;		
   data['x-forwarded-for'] = headers['x-forwarded-for'];
   data['user-agent'] = headers['user-agent'];
-	setTimeout(async () => {
-		try {
-			await publishEvent(data);
-		}
-		catch(err) {
-			console.log('error publishing event');
-		}
-	}, 100);
-	res.status(201).end();
+	res.status(201).send();
+	try {
+		await publishEvent(data);
+	}
+	catch(err) {
+		console.log('error publishing event');
+	}
 });
 
 exports.online = functions.https.onRequest(app);
-
-//export const views = functions.https.onRequest(async (request, response) => {
-//  if (request.method === 'POST') {
-//    try {
-//		  // TOMOVE: start
-//
-//		  // collect important event data
-//      const body = request.body;
-//      const headers = request.headers;
-//      const data = {}
-//      for (const key in body) {
-//        data[key] = body[key];
-//      }
-//      data['x-forwarded-for'] = headers['x-forwarded-for'];
-//      data['user-agent'] = headers['user-agent'];
-//
-//		  // normalize url
-//      data['normalizedUrl'] = normalizeUrl(data['url']);
-//		  // set md5 hash of url 
-//		  const urlMD5Hash = crypto.createHash('md5').update(data['normalizedUrl']).digest("hex");
-//		  data['urlMD5Hash'] = urlMD5Hash;
-//
-//		  // set data to Cloud Firestore
-//		  const addDoc = await db.collection('views').add(data);
-//      return corsWithOptions(request, response, () => {
-//        response.status(200).send();
-//      });
-//    } catch (error) { 
-//      console.log(error);
-//      return corsWithOptions(request, response, () => {
-//        response.status(500).send();
-//      }); 
-//    }
-//		// TOMOVE: end
-//  } else {
-//		return corsWithOptions(request, response, () => {
-//			response.status(405).send();
-//		});
-//  }
-//});
