@@ -65,8 +65,8 @@ const publishEvent = async (data) => {
 app.get('/views', async (req, res) => {
   const data = req.query;
   const headers = req.headers;		
-  data['x-forwarded-for'] = headers['x-forwarded-for'];
-  data['user-agent'] = headers['user-agent'];
+  data['xForwardedFor'] = headers['x-forwarded-for'];
+  data['userAgent'] = headers['user-agent'];
   res.status(201).send();
   try {
     await publishEvent(data);
