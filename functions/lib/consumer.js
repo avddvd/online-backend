@@ -23,14 +23,11 @@ exports.consumeMessage = (message) => __awaiter(this, void 0, void 0, function* 
     try {
         // Decode the PubSub Message body.
         const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
-        console.log('message type: ', typeof (JSON.parse(messageBody)));
-        console.log(JSON.parse(messageBody));
-        const inserted = yield table.insert(JSON.parse(messageBody));
-        console.log('inserted doc: ', inserted);
+        yield table.insert(JSON.parse(messageBody));
         return true;
     }
     catch (err) {
-        console.log('ERROR: error consuming/inserting message');
+        console.log('ERROR: error consuming/inserting message', err);
         return false;
     }
 });

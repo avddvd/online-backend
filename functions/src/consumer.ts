@@ -17,14 +17,11 @@ export const consumeMessage = async (message) => {
 
     // Decode the PubSub Message body.
     const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
-    console.log('message type: ', typeof(JSON.parse(messageBody)));
-    console.log(JSON.parse(messageBody));
-    const inserted = await table.insert(JSON.parse(messageBody));
-    console.log('inserted doc: ', inserted);
+    await table.insert(JSON.parse(messageBody));
     return true;
   }
   catch(err) {
-    console.log('ERROR: error consuming/inserting message');
+    console.log('ERROR: error consuming/inserting message', err);
     return false;
   }
 };
