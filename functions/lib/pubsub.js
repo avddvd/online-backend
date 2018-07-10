@@ -12,13 +12,13 @@ const PubSub = require("@google-cloud/pubsub");
 const functions = require("firebase-functions");
 // config
 const config = functions.config();
-const pubsub = new PubSub();
 const topicName = config.pubsubtopic.name;
+// pubsub
+const pubsub = new PubSub();
 exports.publishMessage = (data) => __awaiter(this, void 0, void 0, function* () {
     const dataBuffer = Buffer.from(JSON.stringify(data));
     try {
-        const message = yield pubsub.topic(topicName).publisher().publish(dataBuffer);
-        console.log(`Message ${message} published`);
+        yield pubsub.topic(topicName).publisher().publish(dataBuffer);
     }
     catch (err) {
         console.log('ERROR: error publishing message', err);
