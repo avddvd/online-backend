@@ -8,20 +8,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const PubSub = require("@google-cloud/pubsub");
 const functions = require("firebase-functions");
+const BigQuery = require("@google-cloud/bigquery");
 // config
 const config = functions.config();
-const topicName = config.pubsubtopic.name;
-// pubsub
-const pubsub = new PubSub();
-exports.publishMessage = (data) => __awaiter(this, void 0, void 0, function* () {
-    const dataBuffer = Buffer.from(JSON.stringify(data));
+const datasetName = config.bigquery.dataset;
+const tableName = config.bigquery.table;
+// bigquery
+const bigquery = new BigQuery();
+const dataset = bigquery.dataset(datasetName);
+const table = dataset.table(tableName);
+// pubsub trigger function
+exports.consumeMessage = (message) => __awaiter(this, void 0, void 0, function* () {
     try {
-        yield pubsub.topic(topicName).publisher().publish(dataBuffer);
+        // Decode the PubSub Message body.
+        const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
+        yield table.insert(JSON.parse(messageBody));
+        return true;
     }
     catch (err) {
-        console.log('ERROR: error publishing message', err);
+        console.log('ERROR: error consuming/inserting message', err);
+        return false;
     }
 });
-//# sourceMappingURL=pubsub.js.map
+//# sourceMappingURL=consumer.js.map
