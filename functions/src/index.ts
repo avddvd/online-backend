@@ -4,11 +4,15 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as pubsubHelper from './pubsub';
+import * as consumer from './consumer';
+
+// config
+const config = functions.config();
+const topicName = config.pubsubtopic.name;
 
 // Cloud Firestore db initialization
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
-const topicName = functions.config().pubsubtopic.name;
 
 //get router
 const app = express();
@@ -76,12 +80,5 @@ app.get('/views', async (req, res) => {
   }
 });
 
-// pubsub trigger function
-exports.consumeViews = functions.pubsub.topic(topicName).onPublish((message) => {
-  // Decode the PubSub Message body.
-  const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
-  console.log(messageBody);
-  return true;
-});
-
 exports.online = functions.https.onRequest(app);
+exports.consumeViews = functions.pubsub.topic(topicName).onPublish(consumer.consumeMessage);
