@@ -9,4 +9,4 @@
 
 ## FAQ:
 ### How to set config for firebase functions
-- ex: firebase functions:config:set service_account="$(cat online-backend-creds.json)"
+- $> firebase functions:config:set service_account="$(cat online-backend-creds.json)"
