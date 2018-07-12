@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as BigQuery from '@google-cloud/bigquery';
+// import * as scrape from './scrape';
 
 // config
 const config = functions.config();
@@ -17,7 +18,9 @@ export const consumeMessage = async (message) => {
 
     // Decode the PubSub Message body.
     const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
-    await table.insert(JSON.parse(messageBody));
+    const messageJson = JSON.parse(messageBody);
+    console.log(messageJson);
+    await table.insert(messageJson);
     return true;
   }
   catch(err) {

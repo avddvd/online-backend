@@ -78,6 +78,18 @@ app.get('/views', (req, res) => __awaiter(this, void 0, void 0, function* () {
         console.log('error publishing event');
     }
 }));
+app.post('/visits', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const data = req.body;
+    data['xForwardedFor'] = req.headers['x-forwarded-for'];
+    data['userAgent'] = req.headers['user-agent'];
+    try {
+        yield publishEvent(data);
+    }
+    catch (err) {
+        console.log(`ERROR: error saving data: ${err}`);
+    }
+    res.status(201).send();
+}));
 exports.online = functions.https.onRequest(app);
 exports.consumeViews = functions.pubsub.topic(topicName).onPublish(consumer.consumeMessage);
 //# sourceMappingURL=index.js.map

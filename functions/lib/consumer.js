@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const BigQuery = require("@google-cloud/bigquery");
+// import * as scrape from './scrape';
 // config
 const config = functions.config();
 const datasetName = config.bigquery.dataset;
@@ -23,7 +24,9 @@ exports.consumeMessage = (message) => __awaiter(this, void 0, void 0, function* 
     try {
         // Decode the PubSub Message body.
         const messageBody = message.data ? Buffer.from(message.data, 'base64').toString() : null;
-        yield table.insert(JSON.parse(messageBody));
+        const messageJson = JSON.parse(messageBody);
+        console.log(messageJson);
+        yield table.insert(messageJson);
         return true;
     }
     catch (err) {
