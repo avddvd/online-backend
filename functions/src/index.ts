@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+// import * as admin from 'firebase-admin';
 import * as cors from 'cors';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
@@ -9,10 +9,6 @@ import * as consumer from './consumer';
 // config
 const config = functions.config();
 const topicName = config.pubsubtopic.name;
-
-// Cloud Firestore db initialization
-admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
 
 //get router
 const app = express();
@@ -58,7 +54,7 @@ app.get('/health', (req, res) => {
 
 const publishEvent = async (data) => {
   try {
-    await db.collection('views').add(data);
+    // await db.collection('views').add(data);
     await pubsubHelper.publishMessage(data);
   }
   catch(err) {

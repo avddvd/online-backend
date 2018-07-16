@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
-const admin = require("firebase-admin");
+// import * as admin from 'firebase-admin';
 const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -18,9 +18,6 @@ const consumer = require("./consumer");
 // config
 const config = functions.config();
 const topicName = config.pubsubtopic.name;
-// Cloud Firestore db initialization
-admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
 //get router
 const app = express();
 //options for cors midddleware
@@ -58,7 +55,7 @@ app.get('/health', (req, res) => {
 });
 const publishEvent = (data) => __awaiter(this, void 0, void 0, function* () {
     try {
-        yield db.collection('views').add(data);
+        // await db.collection('views').add(data);
         yield pubsubHelper.publishMessage(data);
     }
     catch (err) {
