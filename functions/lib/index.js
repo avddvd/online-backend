@@ -75,6 +75,15 @@ app.get('/views', (req, res) => __awaiter(this, void 0, void 0, function* () {
         console.log('error publishing event');
     }
 }));
+app.get('/callback', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    res.status(200).send(`<head>
+      <title>Test</title>
+    </head>
+    <body>
+    Test Page
+    </body>
+  </html>`);
+}));
 app.post('/visits', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const data = req.body;
     data['xForwardedFor'] = req.headers['x-forwarded-for'];

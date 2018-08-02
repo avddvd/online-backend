@@ -76,6 +76,18 @@ app.get('/views', async (req, res) => {
   }
 });
 
+app.get('/callback', async(req, res) =>{
+  res.status(200).send(
+    `<head>
+      <title>Test</title>
+    </head>
+    <body>
+    Test Page
+    </body>
+  </html>`
+  );
+});
+
 app.post('/visits', async (req, res) => {
   const data = req.body; 
   data['xForwardedFor'] = req.headers['x-forwarded-for'];
