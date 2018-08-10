@@ -1,4 +1,5 @@
 creds
 .firebaserc
+FAQ.md
 functions/node_modules
 *.swp
